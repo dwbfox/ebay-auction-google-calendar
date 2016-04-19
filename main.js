@@ -4,10 +4,9 @@
 // @version      0.1
 // @description  Add Ebay Auction Deadlines to Google Calendar
 // @author       dwbfox
-// @match        http://www.ebay.com/itm/*
-// @grant        none
+// @match        *://www.ebay.com/itm/*
 // ==/UserScript==
-//
+
 (function() {
     'use strict';
 
