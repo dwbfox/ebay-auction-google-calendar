@@ -6,9 +6,9 @@
 // @author       dwbfox
 // @license      GPLv3
 // @match        http://www.ebay.com/itm/*
+// @run-at       document-end
 // ==/UserScript==
-
-(function() {
+(function () {
     'use strict';
 
     /**
@@ -20,7 +20,7 @@
     function getAuctionEndDate() {
         var endDate = new Date();
         endDate.setTime(document.querySelector('.timeMs').getAttribute('timems'));
-        return endDate.toISOString().replace(/-|:|\.\d{3}/g,'');
+        return endDate.toISOString().replace(/-|:|\.\d{3}/g, '');
     }
 
 
@@ -35,7 +35,7 @@
         var eventName = 'Auction for ' + document.querySelector('#itemTitle').innerText + ' ends.\n\n';
         var eventDetail = eventName + ' ' + window.location.href;
         return encodeURI('https://www.google.com/calendar/render?action=TEMPLATE&text=' + eventName +
-                         '&dates=' + eventDate + '/' + eventDate + '&details=' + eventDetail + '&location=');
+            '&dates=' + eventDate + '/' + eventDate + '&details=' + eventDetail + '&location=');
     }
 
 
@@ -66,8 +66,5 @@
         return button;
     }
 
-    window.onload = function() {
-        renderButton();
-    };
-
+    renderButton();
 })();
