@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Add Ebay Auctions to Google Calendar
 // @namespace    https://github.com/dwbfox
-// @version      0.1
+// @version      0.1.1
 // @description  Add Ebay Auction Deadlines to Google Calendar
 // @author       dwbfox
 // @license      GPLv3
