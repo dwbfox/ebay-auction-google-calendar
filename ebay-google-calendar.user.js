@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Add Ebay Auctions to Google Calendar
 // @namespace    https://github.com/dwbfox
-// @version      0.1.2
+// @version      0.1.3
 // @description  Add Ebay Auction Deadlines to Google Calendar
 // @author       dwbfox
 // @updateURL    https://raw.githubusercontent.com/dwbfox/ebay-auction-google-calendar/master/ebay-google-calendar.user.js
@@ -11,6 +11,15 @@
 // ==/UserScript==
 (function () {
     'use strict';
+
+    // Calendar services we can send
+    // the auction deadline to
+    var services = {
+        "windowslive": {},
+        "google": {
+            "callback": generateGcalLink,
+        }
+    };
 
     /**
      * Gets the auction end date.
@@ -57,7 +66,8 @@
         button.setAttribute('style', 'margin-top: 3px;');
 
         // Add links
-        var calLink = generateGcalLink();
+        // In the future, this would be set dynamically per issue #1
+        var calLink = services.google.callback();
         button.setAttribute('href', calLink);
         button.setAttribute('role', 'button');
         button.setAttribute('target', '_blank');
