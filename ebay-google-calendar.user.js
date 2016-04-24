@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Add Ebay Auctions to Google Calendar
 // @namespace    https://github.com/dwbfox
-// @version      0.1.3
+// @version      0.1.4
 // @description  Add Ebay Auction Deadlines to Google Calendar
 // @author       dwbfox
 // @updateURL    https://raw.githubusercontent.com/dwbfox/ebay-auction-google-calendar/master/ebay-google-calendar.user.js
@@ -15,11 +15,20 @@
     // Calendar services we can send
     // the auction deadline to
     var services = {
-        "windowslive": {},
+        "outlook": {
+            "name": "Windows Live Outlook",
+            "callback": generateLiveLink,
+            "dateRegex": new RegExp('-|:|\.', 'g')
+        },
         "google": {
+            "name": "Google Calendar",
             "callback": generateGcalLink,
+            "dateRegex": new RegExp('-|:|\.\d{3}', 'g')
         }
     };
+
+    // @TODO Make this a user-editable option
+    var defaultService = services.google;
 
     /**
      * Gets the auction end date.
@@ -30,7 +39,7 @@
     function getAuctionEndDate() {
         var endDate = new Date();
         endDate.setTime(document.querySelector('.timeMs').getAttribute('timems'));
-        return endDate.toISOString().replace(/-|:|\.\d{3}/g, '');
+        return endDate.toISOString().replace(defaultService.dateRegex, '');
     }
 
 
@@ -38,7 +47,7 @@
      * Generates the Google Calendar link.
      *
      * @method     generateGcalLink
-     * @return     {string}  the URL to create the Google calendar event
+     * @return     {string}  the URL to create the calendar event
      */
     function generateGcalLink() {
         var eventDate = getAuctionEndDate();
@@ -48,6 +57,19 @@
             '&dates=' + eventDate + '/' + eventDate + '&details=' + eventDetail + '&location=');
     }
 
+
+    /**
+     * Generates the Windows Live/Outlook formatted link
+     *
+     * @method     generateLiveLink
+     * @return     {string}  the URL to create the calendar event
+     */
+    function generateLiveLink() {
+        var eventDate = getAuctionEndDate();
+        var eventName = 'Auction for ' + document.querySelector('#itemTitle').innerText + ' ends.\n\n';
+        var eventDetail = eventName + ' ' + window.location.href;
+        return encodeURI('http://calendar.live.com/calendar/calendar.aspx?rru=addevent&eventtitle=' + eventName + '&dstart=' + eventDate + '&dend=' + eventDate + '&summary=' + eventName + '&location=');
+    }
 
     /**
      * Renders the button on the page
@@ -62,12 +84,12 @@
         // Render button
         var button = document.createElement('a');
         button.setAttribute('class', 'btn btn-ter');
-        button.innerText = 'Add to Google Calendar';
+        button.innerText = 'Add to ' + defaultService.name;
         button.setAttribute('style', 'margin-top: 3px;');
 
         // Add links
         // In the future, this would be set dynamically per issue #1
-        var calLink = services.google.callback();
+        var calLink = defaultService.callback();
         button.setAttribute('href', calLink);
         button.setAttribute('role', 'button');
         button.setAttribute('target', '_blank');
