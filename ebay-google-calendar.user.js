@@ -15,15 +15,15 @@
     // Calendar services we can send
     // the auction deadline to
     var services = {
-        "outlook": {
+        "windowslive": {
             "name": "Windows Live Outlook",
             "callback": generateLiveLink,
-            "dateRegex": new RegExp('-|:|\.', 'g')
+            "dateRegex": /-|:|\.'/g
         },
         "google": {
             "name": "Google Calendar",
             "callback": generateGcalLink,
-            "dateRegex": new RegExp('-|:|\.\d{3}', 'g')
+            "dateRegex": /-|:|\.\d{3}/g
         }
     };
 
