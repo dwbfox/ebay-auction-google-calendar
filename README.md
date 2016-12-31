@@ -1,4 +1,4 @@
-# ebay-auction-google-calendar
+# 📅 ebay-auction-google-calendar 📅
 Adds an "add to calendar" button on eBay auction pages
 
 ![](https://i.imgur.com/OdAnWL8.png)
