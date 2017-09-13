@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         Add Ebay Auctions to Google Calendar
 // @namespace    https://github.com/dwbfox
-// @version      0.1.4
+// @version      0.1.5
 // @description  Add Ebay Auction Deadlines to Google Calendar
 // @author       dwbfox
 // @updateURL    https://raw.githubusercontent.com/dwbfox/ebay-auction-google-calendar/master/ebay-google-calendar.user.js
 // @license      GPLv3
-// @match        http://www.ebay.com/itm/*
+// @match        http://*.ebay.com/itm/*
 // @run-at       document-end
 // ==/UserScript==
 (function () {
@@ -38,7 +38,11 @@
      */
     function getAuctionEndDate() {
         var endDate = new Date();
-        endDate.setTime(document.querySelector('.timeMs').getAttribute('timems'));
+        try {
+            endDate.setTime(document.querySelector('.timeMs').getAttribute('timems'));
+        } catch (Exception) {
+            throw new Error('End date not found. This page is likely not an auction page or the HTML structure has changed.');
+        }
         return endDate.toISOString().replace(defaultService.dateRegex, '');
     }
 
@@ -71,6 +75,7 @@
         return encodeURI('http://calendar.live.com/calendar/calendar.aspx?rru=addevent&eventtitle=' + eventName + '&dstart=' + eventDate + '&dend=' + eventDate + '&summary=' + eventName + '&location=');
     }
 
+    
     /**
      * Renders the button on the page
      *
