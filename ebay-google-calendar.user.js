@@ -6,7 +6,7 @@
 // @author       dwbfox
 // @updateURL    https://raw.githubusercontent.com/dwbfox/ebay-auction-google-calendar/master/ebay-google-calendar.user.js
 // @license      GPLv3
-// @match        http://*.ebay.com/itm/*
+// @match        *://*.ebay.com/itm/*
 // @run-at       document-end
 // ==/UserScript==
 (function () {
