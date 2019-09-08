@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Add Ebay Auctions to Google Calendar
 // @namespace    https://github.com/dwbfox
-// @version      0.1.6
+// @version      0.1.7
 // @description  Add Ebay Auction Deadlines to Google Calendar
 // @author       dwbfox
 // @updateURL    https://raw.githubusercontent.com/dwbfox/ebay-auction-google-calendar/master/ebay-google-calendar.user.js
@@ -15,11 +15,6 @@
     // Calendar services we can send
     // the auction deadline to
     var services = {
-        "windowslive": {
-            "name": "Windows Live Outlook",
-            "callback": generateLiveLink,
-            "dateRegex": /-|:|\.'/g
-        },
         "google": {
             "name": "Google Calendar",
             "callback": generateGcalLink,
@@ -55,27 +50,13 @@
      */
     function generateGcalLink() {
         var eventDate = getAuctionEndDate();
-        var eventName = 'Auction for ' + document.querySelector('#itemTitle').innerText + ' ends.\n\n';
+        var eventName = 'Auction for: ' + document.title.split('|')[0] + ' ends.\n\n';
         var eventDetail = eventName + ' ' + window.location.href;
         return encodeURI('https://www.google.com/calendar/render?action=TEMPLATE&text=' + eventName +
             '&dates=' + eventDate + '/' + eventDate + '&details=' + eventDetail + '&location=');
     }
 
 
-    /**
-     * Generates the Windows Live/Outlook formatted link
-     *
-     * @method     generateLiveLink
-     * @return     {string}  the URL to create the calendar event
-     */
-    function generateLiveLink() {
-        var eventDate = getAuctionEndDate();
-        var eventName = 'Auction for ' + document.querySelector('#itemTitle').innerText + ' ends.\n\n';
-        var eventDetail = eventName + ' ' + window.location.href;
-        return encodeURI('http://calendar.live.com/calendar/calendar.aspx?rru=addevent&eventtitle=' + eventName + '&dstart=' + eventDate + '&dend=' + eventDate + '&summary=' + eventName + '&location=');
-    }
-
-    
     /**
      * Renders the button on the page
      *
@@ -104,6 +85,6 @@
         document.querySelector('.vi-tm-left').appendChild(container);
         return button;
     }
-
+    console.info("Rendering button...");
     renderButton();
 })();
