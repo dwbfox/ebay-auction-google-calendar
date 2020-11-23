@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         Add Ebay Auctions to Google Calendar
 // @namespace    https://github.com/dwbfox
-// @version      0.1.7
+// @version      0.1.8
 // @description  Add Ebay Auction Deadlines to Google Calendar
 // @author       dwbfox
 // @updateURL    https://raw.githubusercontent.com/dwbfox/ebay-auction-google-calendar/master/ebay-google-calendar.user.js
 // @license      GPLv3
-// @match        *://*.ebay.com/itm/*
+// @include      /http.*//(www\.)?ebay\..*/itm.*/
 // @run-at       document-end
 // ==/UserScript==
 (function () {
@@ -15,16 +15,28 @@
     // Calendar services we can send
     // the auction deadline to
     var services = {
+        "tld": window.location.host.split('.')[2],
         "google": {
             "name": "Google Calendar",
             "callback": generateGcalLink,
-            "dateRegex": /-|:|\.\d{3}/g
+        },
+        "locale": {
+            "com": {
+                "dateRegex": /-|:|\.\d{3}/g
+            },
+            "de": {
+                "dateRegex": /-|:|\.\d{3}/g
+            }
         }
     };
 
     // @TODO Make this a user-editable option
     var defaultService = services.google;
-
+    var defaultLocale = "com"
+    if (services.locale.hasOwnProperty(services.tld)) {
+        defaultLocale = services.tld
+    }
+    console.warn(services)
     /**
      * Gets the auction end date.
      *
@@ -38,7 +50,7 @@
         } catch (Exception) {
             throw new Error('End date not found. This page is likely not an auction page or the HTML structure has changed.');
         }
-        return endDate.toISOString().replace(defaultService.dateRegex, '');
+        return endDate.toISOString().replace(services.locale[defaultLocale].dateRegex, '');
     }
 
 
